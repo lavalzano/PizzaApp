@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Ingredients</title>
+    <div th:replace="base :: headerfg"></div>
+    <link rel="stylesheet" th:href="@{/styles/main.css}">
+</head>
+<body>
+<div th:replace="base :: navlinksfg"></div>
+
+<h2 class="h2">All Ingredients</h2>
+
+<div class="box2">
+    <table class="table">
+        <thead class="thead-warning">
+        <tr>
+            <th scope="col">Ingredient ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="ingredient : ${ingredients}">
+            <td th:text="${ingredient.id}"></td>
+            <td th:text="${ingredient.name}"></td>
+            <td th:text="${ingredient.type}"></td>
+            <td>
+                <button type="button" class="btn btn-warning"><a th:href="@{/admin/updateIngredient/{id}(id=${ingredient.id})}">Update</a></button>
+                <button type="button" class="btn btn-warning"><a th:href="@{/admin/deleteIngredient/{id}(id=${ingredient.id})}">Delete</a></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="base :: footerfg"></div>
+</body>
+</html>

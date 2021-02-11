@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/styles/frontstyles.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/5f50a1b10c.js" crossorigin="anonymous"></script>
+    <style>
+        i {
+            color: rgba(17, 54, 87, 0.2)
+        }
+
+    </style>
+
+    <title>My Cart</title>
+</head>
+<body class="bg">
+<div th:replace="base :: navlinksfg"></div>
+<!--<div class="box">-->
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-6">
+        <div class="card" style="background-color: burlywood; margin-top: 50px; padding: 15px">
+            <h2 class="card-header text-center">My Cart</h2>
+            <div th:if="${checkoutMessage}" style="color: green">
+                [[${checkoutMessage}]]
+            </div>
+            <!--USER CART-->
+            <div sec:authorize="isAuthenticated()">
+
+                <div th:each="order : ${user.orders}">
+                    <div th:if="${order.isComplete() == false}">
+                        <h5>Order# [[${order.id}]]</h5>
+                        <div th:each="pizza : ${order.pizzas}">
+                            <a th:href="@{/updatepizza/{id} (id=${pizza.id})}">
+                                <i class="far fa-edit"></i><!--Edit pizza-->
+                            </a>
+                            Pizza with <span
+                                th:each="ingredient : ${pizza.ingredients}">[[${ingredient.name}]],&nbsp</span>
+                        </div>
+                        <a th:href="@{/addToOrder/{id} (id=${order.id})}">Add another pizza</a><br>
+                        Order Total:
+                        <span th:inline="text">$[[${#numbers.formatDecimal(order.total, 0, 'COMMA', 2, 'POINT')}]]</span>
+                        <br>
+
+
+                        <!--TRIGGER CHECKOUT BUTTON-->
+                        <div class="text-center" style="margin: 15px">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                Checkout
+                            </button>
+                        </div>
+                        <!--END CHECKOUT BUTTON-->
+
+
+                        <!--ORDER CONFIRMATION POP UP-->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Order Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            Order# [[${order.id}]]<br>
+                                            <div th:each="pizza : ${order.pizzas}">
+                                                Pizza with <span
+                                                    th:each="ingredient : ${pizza.ingredients}">[[${ingredient.name}]], &nbsp;</span>
+                                            </div>
+
+                                            <span th:inline="text">$[[${#numbers.formatDecimal(order.total, 0, 'COMMA', 2, 'POINT')}]]</span>
+                                        </div>
+
+                                        <form th:action="@{/checkout/{id} (id=${order.id})}">
+                                            <div class="row">
+                                                <div class="col ml-auto"></div>
+                                                <div class="col-md-6 ml-auto">
+                                                    <div class="card">
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Name On Card"
+                                                               required>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Card Number"
+                                                               required>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Expiration Date"
+                                                               required>
+                                                        <input type="text" class="form-control"
+                                                               placeholder="Security Code"
+                                                               required>
+                                                    </div>
+                                                </div>
+                                                <div class="col ml-auto"></div>
+                                            </div>
+
+                                            <!--POP UP BUTTONS -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Edit
+                                                </button>
+                                                <a th:href="@{/checkout/{id} (id=${order.id})}">
+                                                    <button type="submit" class="btn btn-primary">Place Order</button>
+                                                </a>
+                                            </div>
+                                        </form>
+                                        <!--END POP UP BUTTONS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  <!--END COMPLETE LOOP ORDERS -->
+                    <!--POP UP END-->
+                </div> <!--END ALL ORDERS LOOP-->
+
+                <!--PREVIOUS ORDERS-->
+                <div th:each="order : ${user.orders}">
+                    <div th:if="${order.isComplete() == true}">
+                        <h3>Previous Orders</h3>
+                        <h5>Order# [[${order.id}]]</h5>
+                        <div th:each="pizza : ${order.pizzas}">
+                            Pizza with <span
+                                th:each="ingredient : ${pizza.ingredients}">[[${ingredient.name}]], &nbsp;</span>
+                            <br>
+                        </div>
+                        Placed on: [[${order.timeSubmitted}]]
+                    </div>
+                </div>
+                <!--END PREVIOUS ORDERS-->
+            </div>
+            <!--END USER CART-->
+
+            <!--GUEST CART-->
+            <div sec:authorize="!isAuthenticated()">
+                <div th:each="one : ${guestOrders}">
+                    <h5>Order# [[${one.id}]]</h5>
+                    <div th:each="pizza : ${one.pizzas}">
+                        <a th:href="@{/updatepizza/{id} (id=${pizza.id})}">
+                            <i class="far fa-edit"></i><!--Edit pizza-->
+                        </a>
+                        Pizza with <span th:each="ingredient : ${pizza.ingredients}">[[${ingredient.name}]], </span>
+                    </div>
+                    <a th:href="@{/addToOrder/{id} (id=${one.id})}">Add another pizza</a>
+                    <span th:inline="text">$[[${#numbers.formatDecimal(one.total, 0, 'COMMA', 2, 'POINT')}]]</span><br>
+                </div>
+
+                <a th:href="@{/login}">Login</a> or <a th:href="@{/register}">Sign Up</a> checkout.
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+<!--</div> BOX-->
+<!--END GUEST CART-->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

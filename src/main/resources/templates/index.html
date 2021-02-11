@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <div th:replace="base :: headerfg"></div>
+    <link rel="stylesheet" th:href="@{/styles/frontstyles.css}">
+    <style>
+        body{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="base :: navlinksfg"></div>
+<div class="bg">
+
+    <div>
+        <table cellspacing="15" cellpadding="15"class="center">
+            <tr>
+
+                <th><a th:href="@{/login}"><h4 h4 style="color:white;">LOGIN</h4></a></th>
+
+                <th><a th:href="@{/register}"><h4 style="color:white;">REGISTER</h4></a></th>
+
+                <!--Link to place order-->
+                <th><a th:href="@{/order}"><h4 h4 style="color:white;">CLICK TO PLACE ORDER</h4></a></th>
+                <!--Link to cart-->
+
+                <th><a th:href="@{/cart}"><h4 h4 style="color:white;">MY CART</h4></a></th>
+            </tr>
+        </table>
+        <div sec:authorize="isAuthenticated()">
+            <h4 class="font">  Welcome <span sec:authentication="name"></span>!</h4>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <h4 class="font" >Welcome guest!</h4>
+        </div>
+        <div><h1 class="font2">&Slices Pizza Co</h1></div>
+        <h4 style="color: white;font-size:60px" >Serving
+            Custom, Artisan Pizzas</h4>
+    </div>]
+
+
+
+    <div th:replace="base :: footerfg">
+    </div>
+</div>
+</div>
+</body>
+</html>

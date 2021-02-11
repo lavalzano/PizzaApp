@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Ingredients</title>
+    <div th:replace="base :: headerfg"></div>
+    <link rel="stylesheet" th:href="@{/styles/main.css}">
+</head>
+<body>
+<div th:replace="base :: navlinksfg"></div>
+<h2 class="h2">Add/Update Ingredient</h2>
+
+<div class="boxupdate">
+    <form class="card-form2" autocomplete="off"
+          th:action="@{/admin/processAddIngredient}"
+          th:object="${ingredient}"
+          method="post"
+          enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="col-md-9 mb-6">
+
+                <input type="hidden" th:field="*{id}"/>
+
+                <label for="ingredient">Ingredient name:</label>
+                <input type="text" class="form-control" id="ingredient" placeholder="Ingredient"
+                       th:field="*{name}">
+
+                <br/>
+
+                <label>Choose a Category:</label>
+                <select th:field="*{type}">
+                    <option th:each="type : ${type}"
+                            th:value="${type.id}"
+                            th:text="${type.name}"></option>
+                </select>
+                <br/>
+                <br/>
+                <!--                <p class="message" th:if="${message}">[[${message}]]</p>-->
+                <!--                <label>Upload Image *(Required):</label>-->
+                <!--                <input type="file" name="file"/>-->
+                <!--                <br/>-->
+                <!--                <h6>*For best results, please upload a small-sized image.</h6>-->
+                <!--                <br/>-->
+                <!--                <br/>-->
+                <button class="btn btn-primary" type="submit">Enter</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:replace="base :: footerfg"></div>
+</body>
+</html>

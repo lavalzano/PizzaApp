@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <div th:replace="base :: headerfg"></div>
+    <link rel="stylesheet" th:href="@{/styles/main.css}">
+</head>
+<body>
+<div th:replace="base :: navlinksfg"></div>
+
+<div class="box">
+    <div class="imgBx">
+        <img class="card-img" th:src="@{/images/pizza1.jpg}" alt="pizza">
+    </div>
+    <div class="content">
+        <h2 class="h2-2">Admin Dashboard</h2>
+        <div class="addash">
+            <button type="button" class="btn btn-warning" style="width: 40%"><a th:href="@{/admin/totalsales}">Total Sales</a></button>
+            <button type="button" class="btn btn-warning" style="width: 40%"><a th:href="@{/admin/topthree}">Top Three Ingredients</a></button>
+            <button type="button" class="btn btn-warning" style="width: 40%"><a th:href="@{/admin/ingredients}">Update Ingredients</a></button>
+            <button type="button" class="btn btn-warning" style="width: 40%"><a th:href="@{/admin/addingredient}">Add New Ingredient</a></button>
+            <button type="button" class="btn btn-warning" style="width: 40%"><a th:href="@{/admin/customers}">View Customers</a></button>
+            <button type="button" class="btn btn-warning" style="width: 40%"><a th:href="@{/admin/searchbyname}">Search Customers</a></button>
+            </br>
+        </div>
+    </div>
+</div>
+<div th:replace="base :: footerfg"></div>
+</body>
+</html>

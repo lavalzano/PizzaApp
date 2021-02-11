@@ -1,0 +1,44 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+    <div th:replace="base :: headerfg"></div>
+    <link rel="stylesheet" th:href="@{/styles/main.css}">
+</head>
+<body>
+<div th:replace="base :: navlinksfg"></div>
+
+<h2 class="h2">Customer List</h2>
+
+<div class="box2">
+    <table class="table">
+
+        <thead class="thead-warning">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Username</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="users : ${customers}"
+            th:if="${users.username != 'admin'}">
+            <td th:text="${users.id}"></td>
+            <td th:text="${users.firstName}"></td>
+            <td th:text="${users.lastName}"></td>
+            <td th:text="${users.email}"></td>
+            <td th:text="${users.phoneNumber}"></td>
+            <td th:text="${users.username}"></td>
+        </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<div th:replace="base :: footerfg"></div>
+</body>
+</html>
